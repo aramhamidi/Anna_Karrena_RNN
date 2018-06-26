@@ -171,6 +171,16 @@ print('\ny\n', y.shape)
 ### Input layer
 We need placeholders for inputs, targets and dropout layer keep_probability.
 
+
+```python
+# placeholders for x,y and keep_prob of dropout layers
+def input_generator(batch_size, num_steps):
+    inputs = tf.placeholder(tf.int32, [batch_size, num_steps],name='x')
+    targets = tf.placeholder(tf.int32, [batch_size, num_steps],name='y')
+    keep_prob = tf.placeholder(tf.float32,name='keep_prob')
+    return inputs, targets, keep_prob
+```
+
 ### LSTM Cells
 
 Here we build one cell of LSTM and stack them up into as many as needed in one layer.
@@ -195,16 +205,6 @@ def LSTM_Cells(lstm_size, num_layers, batch_size, keep_prob):
 ```
 
 ### Output Layer
-
-
-```python
-# placeholders for x,y and keep_prob of dropout layers
-def input_generator(batch_size, num_steps):
-    inputs = tf.placeholder(tf.int32, [batch_size, num_steps],name='x')
-    targets = tf.placeholder(tf.int32, [batch_size, num_steps],name='y')
-    keep_prob = tf.placeholder(tf.float32,name='keep_prob')
-    return inputs, targets, keep_prob
-```
 
 The output of RNN cells(hidden Layers) will be fully connected to output layer through softmax to produce predictions. So the size of this layer should be the same as size of our data set characters which is 83.
 So if we have N sequences of inputs, each with M steps, when they pass through L number of lstm cells in our hidden layer, the output will be size N . M . L. This is a 3D tensor object that we need to reshape in to a 2D tensor of shape (N . M) . L.
